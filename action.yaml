@@ -1,0 +1,47 @@
+name: 'KMP Promote Android App to Production'
+description: 'Promote the Android application to the Play Store Production track'
+author: 'Mifos Initiative'
+branding:
+  icon: 'upload-cloud'
+  color: 'purple'
+
+inputs:
+  android_package_name:
+    description: 'Name of the Android project module'
+    required: true
+  playstore_creds:
+    description: 'Firebase credentials JSON file'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    # Setup Ruby for Fastlane
+    - name: Configure Ruby
+      uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
+      with:
+        bundler-cache: true
+    
+    # Install Fastlane and plugins for Play Store deployment
+    - name: Install Fastlane
+      shell: bash
+      run: |
+        gem install bundler:2.2.27
+        bundle install --jobs 4 --retry 3
+        bundle exec fastlane add_plugin firebase_app_distribution
+        bundle exec fastlane add_plugin increment_build_number
+
+    - name: Inflate Secrets
+      shell: bash
+      env:
+        PLAYSTORE_CREDS: ${{ inputs.playstore_creds }}
+      run: |
+        # Inflate PlayStore credentials
+        touch ${{ inputs.android_package_name }}/playStorePublishServiceCredentialsFile.json
+        echo $PLAYSTORE_CREDS > ${{ inputs.android_package_name }}/playStorePublishServiceCredentialsFile.json
+    
+
+    # Promote Android App to Production
+    - name: Promote Android App to Production
+      shell: bash
+      run: bundle exec fastlane android promote_to_production
