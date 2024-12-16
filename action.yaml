@@ -37,8 +37,7 @@ runs:
         PLAYSTORE_CREDS: ${{ inputs.playstore_creds }}
       run: |
         # Inflate PlayStore credentials
-        touch ${{ inputs.android_package_name }}/playStorePublishServiceCredentialsFile.json
-        echo $PLAYSTORE_CREDS > ${{ inputs.android_package_name }}/playStorePublishServiceCredentialsFile.json
+        echo $PLAYSTORE_CREDS | base64 --decode > ${{ inputs.android_package_name }}/playStorePublishServiceCredentialsFile.json
     
 
     # Promote Android App to Production
