@@ -21,7 +21,7 @@ This GitHub Action automates the process of promoting an Android application fro
 | Input                  | Description                            | Required |
 |------------------------|----------------------------------------|----------|
 | `android_package_name` | Name of the Android project module     | Yes      |
-| `playstore_creds`      | Firebase credentials JSON file content | Yes      |
+| `playstore_creds`      | Base64 Encoded Firebase credentials JSON file content | Yes      |
 
 ## Usage
 
