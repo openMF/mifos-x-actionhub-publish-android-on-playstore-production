@@ -37,7 +37,6 @@ runs:
         # Inflate PlayStore credentials
         touch secrets/playStorePublishServiceCredentialsFile.json
         echo $PLAYSTORE_CREDS  | base64 --decode > secrets/playStorePublishServiceCredentialsFile.json
-    
 
     # Promote Android App to Production
     - name: Promote Android App to Production

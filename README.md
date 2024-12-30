@@ -62,3 +62,16 @@ jobs:
 - Does not perform any building or signing operations
 - Relies on existing app version in Beta track
 - Uses Fastlane for Play Store interaction
+
+## Security Considerations
+
+- Play Store credentials should be stored as GitHub Secrets
+- Credentials are handled securely and not exposed in logs
+- Only minimal required permissions should be granted to service account
+
+## Dependencies
+
+- Ruby (installed via setup-ruby action)
+- Bundler 2.2.27
+- Fastlane with firebase_app_distribution plugin
+- Fastlane with increment_build_number plugin
