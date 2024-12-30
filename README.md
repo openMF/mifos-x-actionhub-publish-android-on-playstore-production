@@ -18,9 +18,8 @@ This GitHub Action automates the process of promoting an Android application fro
 
 ## Inputs
 
-| Input                  | Description                            | Required |
-|------------------------|----------------------------------------|----------|
-| `android_package_name` | Name of the Android project module     | Yes      |
+| Input                  | Description                                           | Required |
+|------------------------|-------------------------------------------------------|----------|
 | `playstore_creds`      | Base64 Encoded Firebase credentials JSON file content | Yes      |
 
 ## Usage
@@ -30,9 +29,8 @@ jobs:
   promote-to-production:
     runs-on: macos-latest
     steps:
-      - uses: openMF/kmp-publish-android-on-playstore-production-action@v1.0.0
+      - uses: openMF/kmp-publish-android-on-playstore-production-action@v2.0.0
         with:
-          android_package_name: 'app'
           playstore_creds: ${{ secrets.PLAYSTORE_CREDS }}
 ```
 
@@ -64,14 +62,6 @@ jobs:
 - Does not perform any building or signing operations
 - Relies on existing app version in Beta track
 - Uses Fastlane for Play Store interaction
-
-## Error Handling
-
-The action will fail if:
-- Required inputs are missing
-- Play Store credentials are invalid
-- Promotion process encounters errors
-- Fastlane configuration is missing or incorrect
 
 ## Security Considerations
 
