@@ -21,7 +21,7 @@ runs:
       uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
       with:
         bundler-cache: true
-    
+
     # Install Fastlane and plugins for Play Store deployment
     - name: Install Fastlane
       shell: bash
@@ -36,9 +36,12 @@ runs:
       env:
         PLAYSTORE_CREDS: ${{ inputs.playstore_creds }}
       run: |
+        mkdir -p secrets
         # Inflate PlayStore credentials
-        echo $PLAYSTORE_CREDS > ${{ inputs.android_package_name }}/playStorePublishServiceCredentialsFile.json
+        touch secrets/playStorePublishServiceCredentialsFile.json
+        echo $PLAYSTORE_CREDS  | base64 --decode > secrets/playStorePublishServiceCredentialsFile.json
     
+
     # Promote Android App to Production
     - name: Promote Android App to Production
       shell: bash
