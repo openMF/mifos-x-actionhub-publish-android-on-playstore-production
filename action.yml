@@ -1,0 +1,35 @@
+# Composite action: Promote Play Store beta → production
+# Patched for fastlane-modernization sub-plan 12:
+#   - AC19: SHA-pin ruby/setup-ruby
+name: 'Promote Android Play Store (Beta → Production)'
+description: 'Promote Play Store beta track to production.'
+
+inputs:
+  playstore_creds:
+    description: 'Base64 Play Store service account JSON'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Ruby (SHA-pinned — AC19)
+      uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f  # v1.232.0
+      with:
+        bundler-cache: true
+
+    - name: Inflate secrets
+      shell: bash
+      env:
+        PLAYSTORE_CREDS_B64: ${{ inputs.playstore_creds }}
+      run: |
+        mkdir -p secrets
+        echo "$PLAYSTORE_CREDS_B64" | base64 --decode > secrets/playStorePublishServiceCredentialsFile.json
+
+    - name: Promote to production
+      shell: bash
+      run: bundle exec fastlane android promote_to_production
+
+    - name: Cleanup
+      shell: bash
+      if: always()
+      run: rm -f secrets/playStorePublishServiceCredentialsFile.json
